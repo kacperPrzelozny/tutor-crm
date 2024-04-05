@@ -2,7 +2,7 @@ FROM php:8.3-apache-bookworm
 
 # Surpresses debconf complaints of trying to install apt packages interactively
 # https://github.com/moby/moby/issues/4032#issuecomment-192327844
- 
+
 ARG DEBIAN_FRONTEND=noninteractive
 
 # Update
@@ -26,7 +26,7 @@ libicu-dev && \
 build-essential \
 git \
 curl \
-libonig-dev && \ 
+libonig-dev && \
     apt-get install -y iputils-ping && \
     apt-get -y --no-install-recommends install --fix-missing libcurl4 \
 libcurl4-openssl-dev \
@@ -80,7 +80,7 @@ RUN docker-php-ext-install pdo_mysql && \
     docker-php-ext-install exif
 
 
-# Install Freetype 
+# Install Freetype
 RUN apt-get -y update && \
     apt-get --no-install-recommends install -y libfreetype6-dev \
 libjpeg62-turbo-dev \
@@ -97,6 +97,13 @@ RUN a2enmod ssl && a2enmod rewrite
 
 # Enable apache modules
 RUN a2enmod rewrite headers
+
+# Install nvm and node
+SHELL ["/bin/bash", "--login", "-c"]
+
+RUN curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.35.3/install.sh | bash
+RUN nvm install 21
+RUN nvm use 21
 
 # Cleanup
 RUN rm -rf /usr/src/*
