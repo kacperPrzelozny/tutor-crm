@@ -3,8 +3,10 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
-use App\Models\User;
+use App\Models\Student;
+use App\Models\Tutor;
 use Illuminate\Foundation\Auth\RegistersUsers;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 
@@ -28,7 +30,7 @@ class RegisterController extends Controller
      *
      * @var string
      */
-    protected $redirectTo = '/home';
+    protected $redirectTo = '/';
 
     /**
      * Create a new controller instance.
@@ -55,18 +57,37 @@ class RegisterController extends Controller
         ]);
     }
 
-    /**
-     * Create a new user instance after a valid registration.
-     *
-     * @param  array  $data
-     * @return \App\Models\User
-     */
-    protected function create(array $data)
+    public function showTutorRegisterForm()
     {
-        return User::create([
-            'name' => $data['name'],
-            'email' => $data['email'],
-            'password' => Hash::make($data['password']),
+        return view('auth.register', ['url' => 'admin']);
+    }
+
+    protected function createTutor(Request $request)
+    {
+        $this->validator($request->all())->validate();
+        $admin = Tutor::create([
+            'name' => $request['name'],
+            'email' => $request['email'],
+            'password' => Hash::make($request['password']),
         ]);
+
+        return redirect()->intended('login/admin');
+    }
+
+    public function showStudentRegisterForm()
+    {
+        return view('auth.register', ['url' => 'writer']);
+    }
+
+    protected function createStudent(Request $request)
+    {
+        $this->validator($request->all())->validate();
+        $admin = Student::create([
+            'name' => $request['name'],
+            'email' => $request['email'],
+            'password' => Hash::make($request['password']),
+        ]);
+
+        return redirect()->intended('login/admin');
     }
 }
