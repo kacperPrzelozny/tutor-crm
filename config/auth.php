@@ -1,5 +1,7 @@
 <?php
 
+use App\Models\Tutor;
+
 return [
 
     /*
@@ -14,8 +16,8 @@ return [
     */
 
     'defaults' => [
-        'guard' => env('AUTH_GUARD', 'web'),
-        'passwords' => env('AUTH_PASSWORD_BROKER', 'users'),
+        'guard' => env('AUTH_GUARD', 'tutors'),
+        'passwords' => env('AUTH_PASSWORD_BROKER', 'tutors'),
     ],
 
     /*
@@ -36,9 +38,9 @@ return [
     */
 
     'guards' => [
-        'web' => [
+        'tutors' => [
             'driver' => 'session',
-            'provider' => 'users',
+            'provider' => 'tutors',
         ],
     ],
 
@@ -60,9 +62,9 @@ return [
     */
 
     'providers' => [
-        'users' => [
+        'tutors' => [
             'driver' => 'eloquent',
-            'model' => env('AUTH_MODEL', App\Models\User::class),
+            'model' => Tutor::class,
         ],
 
         // 'users' => [
@@ -91,8 +93,8 @@ return [
     */
 
     'passwords' => [
-        'users' => [
-            'provider' => 'users',
+        'tutors' => [
+            'provider' => 'tutors',
             'table' => env('AUTH_PASSWORD_RESET_TOKEN_TABLE', 'password_reset_tokens'),
             'expire' => 60,
             'throttle' => 60,
